@@ -1,5 +1,6 @@
 [build]
-buildCommand = "composer install --no-dev --optimize-autoloader && php artisan config:clear && php artisan cache:clear"
+buildCommand = "composer install --no-dev --optimize-autoloader && php artisan config:clear"
 
 [deploy]
+preDeployCommand = "php artisan cache:clear"
 startCommand = "php -S 0.0.0.0:$PORT -t public"
