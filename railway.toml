@@ -1,8 +1,5 @@
-[deploy]
-startCommand = "php artisan serve --host=0.0.0.0 --port=$PORT"
-
 [build]
-buildCommand = "composer install"
+buildCommand = "composer install --no-dev --optimize-autoloader"
 
-[deploy.preDeployCommand]
-command = "php artisan migrate --force"
+[deploy]
+startCommand = "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
