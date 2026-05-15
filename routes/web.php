@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SparringController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,14 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Sparring Routes (Public viewing, Auth for create/join)
+Route::get('/sparring', [SparringController::class, 'index'])->name('sparring.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/sparring/create', [SparringController::class, 'create'])->name('sparring.create');
+    Route::post('/sparring', [SparringController::class, 'store'])->name('sparring.store');
+    Route::post('/sparring/{id}/join', [SparringController::class, 'join'])->name('sparring.join');
+});
 
 // Auth Routes
 Route::middleware('guest')->group(function () {

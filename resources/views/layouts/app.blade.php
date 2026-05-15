@@ -31,6 +31,9 @@
                 </div>
                 <div class="hidden md:flex space-x-4 items-center">
                     <a href="{{ route('home') }}" class="hover:text-green-200 dark:hover:text-neon-green transition">Home</a>
+                    <a href="{{ route('sparring.index') }}" class="hover:text-green-200 dark:hover:text-neon-green transition flex items-center">
+                        Cari Lawan <span class="ml-1 bg-neon-green text-black text-[10px] px-1 rounded font-bold">HOT</span>
+                    </a>
                     
                     <!-- Dark Mode Toggle -->
                     <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); document.documentElement.classList.toggle('dark')" 

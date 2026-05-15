@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('sparrings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('lapangan_id')->constrained()->onDelete('cascade');
+            $table->date('date');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->text('description')->nullable();
+            $table->enum('status', ['Open', 'Matched', 'Closed'])->default('Open');
             $table->timestamps();
         });
     }
