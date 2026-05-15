@@ -1,15 +1,16 @@
 {
-  "name": "RaffiDiva Futsal Booking",
-  "short_name": "FutsalBooking",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#0F172A",
-  "theme_color": "#16a34a",
-  "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/33/33736.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+    "name": "RaffiDiva Futsal Booking",
+    "short_name": "RaffiDiva",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0A0A0A",
+    "theme_color": "#16a34a",
+    "icons": [
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/33/33736.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
 }

@@ -14,29 +14,41 @@ class AdminController extends Controller
         $totalBookings = Booking::count();
         $totalLapangan = Lapangan::count();
         $recentBookings = Booking::with(['user', 'lapangan'])->latest()->take(5)->get();
-        
-        // Data for charts
-        $labels = [];
-        $bookingData = [];
+        // Analytics Data
+        $months = [];
+        $bookingCounts = [];
         $revenueData = [];
-        
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i)->toDateString();
-            $labels[] = now()->subDays($i)->format('d M');
+
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $months[] = $date->format('M Y');
             
-            $bookingData[] = Booking::whereDate('created_at', $date)->count();
-            $revenueData[] = Booking::whereDate('created_at', $date)
+            $count = Booking::whereMonth('created_at', $date->month)
+                ->whereYear('created_at', $date->year)
+                ->count();
+            $bookingCounts[] = $count;
+
+            $revenue = Booking::whereMonth('created_at', $date->month)
+                ->whereYear('created_at', $date->year)
                 ->where('status', 'Disetujui')
                 ->sum('total_price');
+            $revenueData[] = $revenue;
         }
-        
+
+        $lapanganStats = Lapangan::withCount('bookings')->get();
+        $lapanganNames = $lapanganStats->pluck('name');
+        $lapanganBookingCounts = $lapanganStats->pluck('bookings_count');
+
         return view('admin.dashboard', compact(
             'totalBookings', 
             'totalLapangan', 
-            'recentBookings',
-            'labels',
-            'bookingData',
-            'revenueData'
+            'recentBookings', 
+            'months', 
+            'bookingCounts', 
+            'revenueData',
+            'lapanganNames',
+            'lapanganBookingCounts'
+
         ));
     }
 

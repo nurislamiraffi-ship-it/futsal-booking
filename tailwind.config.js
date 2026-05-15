@@ -9,19 +9,20 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
-
     theme: {
         extend: {
-            colors: {
-                'futsal-neon': '#39FF14',
-                'futsal-dark': '#0F172A',
-                'futsal-slate': '#1E293B',
-            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'neon-green': '#39FF14',
+                'deep-slate': '#121212',
+                'premium-black': '#0A0A0A',
+                'futsal-neon': '#39FF14', // keeping for compatibility
+                'futsal-dark': '#0F172A',
+                'futsal-slate': '#1E293B',
+            },
         },
     },
-
     plugins: [forms],
 };
