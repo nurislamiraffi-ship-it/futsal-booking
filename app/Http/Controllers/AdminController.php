@@ -14,7 +14,30 @@ class AdminController extends Controller
         $totalBookings = Booking::count();
         $totalLapangan = Lapangan::count();
         $recentBookings = Booking::with(['user', 'lapangan'])->latest()->take(5)->get();
-        return view('admin.dashboard', compact('totalBookings', 'totalLapangan', 'recentBookings'));
+        
+        // Data for charts
+        $labels = [];
+        $bookingData = [];
+        $revenueData = [];
+        
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $labels[] = now()->subDays($i)->format('d M');
+            
+            $bookingData[] = Booking::whereDate('created_at', $date)->count();
+            $revenueData[] = Booking::whereDate('created_at', $date)
+                ->where('status', 'Disetujui')
+                ->sum('total_price');
+        }
+        
+        return view('admin.dashboard', compact(
+            'totalBookings', 
+            'totalLapangan', 
+            'recentBookings',
+            'labels',
+            'bookingData',
+            'revenueData'
+        ));
     }
 
     public function lapanganIndex()
