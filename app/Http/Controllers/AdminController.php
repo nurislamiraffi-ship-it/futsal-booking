@@ -16,18 +16,20 @@ class AdminController extends Controller
         $recentBookings = Booking::with(['user', 'lapangan'])->latest()->take(5)->get();
 
         // Chart Data: Bookings per month (Last 6 months)
-        $monthlyBookings = Booking::selectRaw('COUNT(*) as count, MONTHNAME(booking_date) as month')
+        $monthlyBookings = Booking::selectRaw('COUNT(*) as count, MONTHNAME(booking_date) as month, YEAR(booking_date) as year, MONTH(booking_date) as month_num')
             ->where('booking_date', '>=', now()->subMonths(6))
-            ->groupBy('month')
-            ->orderBy('booking_date')
+            ->groupBy('year', 'month_num', 'month')
+            ->orderBy('year')
+            ->orderBy('month_num')
             ->get();
 
         // Chart Data: Revenue per month (Last 6 months)
-        $monthlyRevenue = Booking::selectRaw('SUM(total_price) as revenue, MONTHNAME(booking_date) as month')
+        $monthlyRevenue = Booking::selectRaw('SUM(total_price) as revenue, MONTHNAME(booking_date) as month, YEAR(booking_date) as year, MONTH(booking_date) as month_num')
             ->where('status', 'Disetujui')
             ->where('booking_date', '>=', now()->subMonths(6))
-            ->groupBy('month')
-            ->orderBy('booking_date')
+            ->groupBy('year', 'month_num', 'month')
+            ->orderBy('year')
+            ->orderBy('month_num')
             ->get();
 
         $chartLabels = $monthlyBookings->pluck('month');
