@@ -9,20 +9,25 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
+
     theme: {
         extend: {
+            colors: {
+                'futsal-green': {
+                    DEFAULT: '#22c55e',
+                    dark: '#4ade80',
+                },
+                'futsal-dark': '#0f172a',
+                'futsal-primary': '#14532d', // Dark Green for Header
+                'futsal-accent': '#22c55e',  // Neon Green
+                'futsal-card': '#1e293b',    // Slate 800 for Cards
+                'futsal-dark-bg': '#020617', // Slate 950 for Body
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
-            colors: {
-                'neon-green': '#39FF14',
-                'deep-slate': '#121212',
-                'premium-black': '#0A0A0A',
-                'futsal-neon': '#39FF14', // keeping for compatibility
-                'futsal-dark': '#0F172A',
-                'futsal-slate': '#1E293B',
-            },
         },
     },
+
     plugins: [forms],
 };

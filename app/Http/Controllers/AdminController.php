@@ -14,41 +14,33 @@ class AdminController extends Controller
         $totalBookings = Booking::count();
         $totalLapangan = Lapangan::count();
         $recentBookings = Booking::with(['user', 'lapangan'])->latest()->take(5)->get();
-        // Analytics Data
-        $months = [];
-        $bookingCounts = [];
-        $revenueData = [];
 
-        for ($i = 5; $i >= 0; $i--) {
-            $date = now()->subMonths($i);
-            $months[] = $date->format('M Y');
-            
-            $count = Booking::whereMonth('created_at', $date->month)
-                ->whereYear('created_at', $date->year)
-                ->count();
-            $bookingCounts[] = $count;
+        // Chart Data: Bookings per month (Last 6 months)
+        $monthlyBookings = Booking::selectRaw('COUNT(*) as count, MONTHNAME(booking_date) as month')
+            ->where('booking_date', '>=', now()->subMonths(6))
+            ->groupBy('month')
+            ->orderBy('booking_date')
+            ->get();
 
-            $revenue = Booking::whereMonth('created_at', $date->month)
-                ->whereYear('created_at', $date->year)
-                ->where('status', 'Disetujui')
-                ->sum('total_price');
-            $revenueData[] = $revenue;
-        }
+        // Chart Data: Revenue per month (Last 6 months)
+        $monthlyRevenue = Booking::selectRaw('SUM(total_price) as revenue, MONTHNAME(booking_date) as month')
+            ->where('status', 'Disetujui')
+            ->where('booking_date', '>=', now()->subMonths(6))
+            ->groupBy('month')
+            ->orderBy('booking_date')
+            ->get();
 
-        $lapanganStats = Lapangan::withCount('bookings')->get();
-        $lapanganNames = $lapanganStats->pluck('name');
-        $lapanganBookingCounts = $lapanganStats->pluck('bookings_count');
+        $chartLabels = $monthlyBookings->pluck('month');
+        $bookingData = $monthlyBookings->pluck('count');
+        $revenueData = $monthlyRevenue->pluck('revenue');
 
         return view('admin.dashboard', compact(
             'totalBookings', 
             'totalLapangan', 
             'recentBookings', 
-            'months', 
-            'bookingCounts', 
-            'revenueData',
-            'lapanganNames',
-            'lapanganBookingCounts'
-
+            'chartLabels', 
+            'bookingData', 
+            'revenueData'
         ));
     }
 

@@ -33,34 +33,41 @@
 <body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-100 font-sans antialiased transition-colors duration-300">
 
     <!-- Navbar -->
-    <nav class="bg-green-600 dark:bg-green-800 text-white shadow-md">
+    <nav class="bg-futsal-primary text-white shadow-md border-b border-green-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-2xl font-bold italic tracking-wider">⚽ RaffiDiva Futsal</a>
+                    <a href="{{ route('home') }}" class="text-2xl font-bold italic tracking-wider flex items-center gap-2">
+                        <span class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center">⚽</span>
+                        RaffiDiva Futsal
+                    </a>
                 </div>
-                <div class="hidden md:flex space-x-4 items-center">
-                    <a href="{{ route('home') }}" class="hover:text-green-200 transition">Home</a>
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="{{ route('home') }}" class="font-medium hover:text-futsal-accent transition">Home</a>
+                    
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" class="font-medium hover:text-futsal-accent transition">Admin Dashboard</a>
+                        @else
+                            <a href="{{ route('user.dashboard') }}" class="font-medium hover:text-futsal-accent transition">My Dashboard</a>
+                        @endif
+                    @endauth
+
                     <!-- Dark Mode Toggle -->
                     <button @click="dark = !dark; if (dark) { document.documentElement.classList.add('dark'); localStorage.theme = 'dark' } else { document.documentElement.classList.remove('dark'); localStorage.theme = 'light' }" 
-                        class="p-2 rounded-full hover:bg-green-500 dark:hover:bg-green-700 transition"
+                        class="p-2 rounded-full hover:bg-green-700 transition"
                         x-data="{ dark: document.documentElement.classList.contains('dark') }">
                         <template x-if="!dark">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                         </template>
                         <template x-if="dark">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         </template>
                     </button>
 
                     @auth
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="hover:text-green-200 transition">Admin Dashboard</a>
-                        @else
-                            <a href="{{ route('user.dashboard') }}" class="hover:text-green-200 transition">My Dashboard</a>
-                        @endif
                         <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open" class="flex items-center space-x-1 hover:text-green-200 focus:outline-none">
+                            <button @click="open = !open" class="flex items-center space-x-1 font-medium hover:text-futsal-accent focus:outline-none">
                                 <span>{{ auth()->user()->name }}</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
@@ -72,8 +79,8 @@
                             </div>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="hover:text-green-200 transition">Login</a>
-                        <a href="{{ route('register') }}" class="bg-white text-green-600 px-4 py-2 rounded-md font-semibold hover:bg-gray-100 transition">Register</a>
+                        <a href="{{ route('login') }}" class="font-medium hover:text-futsal-accent transition">Login</a>
+                        <a href="{{ route('register') }}" class="bg-futsal-accent text-black px-6 py-2 rounded-lg font-bold hover:bg-green-400 transition shadow-lg">Register</a>
                     @endauth
                 </div>
             </div>
@@ -102,8 +109,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-black text-white text-center py-6 mt-12">
-        <p class="text-gray-400">&copy; {{ date('Y') }} RaffiDiva Futsal. All rights reserved.</p>
+    <footer class="bg-futsal-dark-bg border-t border-slate-800 text-white text-center py-8">
+        <p class="text-gray-400 text-sm italic mb-2">Developed with ❤️ for Futsal Lovers</p>
+        <p class="text-gray-500 text-xs">&copy; 2026 RaffiDiva Futsal. All rights reserved.</p>
     </footer>
 
 </body>

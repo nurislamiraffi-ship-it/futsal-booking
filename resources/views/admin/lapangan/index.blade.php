@@ -3,51 +3,65 @@
 @section('title', 'Kelola Lapangan - Admin Futsal Booking')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ showModal: false }">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold text-gray-900 border-b-4 border-green-500 inline-block pb-2">Kelola Lapangan</h2>
-        <button @click="showModal = true" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition">
-            + Tambah Lapangan
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" x-data="{ showModal: false }">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+        <div>
+            <h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Kelola <span class="text-futsal-primary dark:text-futsal-accent font-black tracking-normal">Lapangan</span></h2>
+            <p class="text-slate-500 dark:text-gray-400 mt-1 font-medium">Tambah, edit, atau hapus fasilitas lapangan futsal.</p>
+        </div>
+        <button @click="showModal = true" class="bg-futsal-accent hover:bg-green-400 text-black font-black py-3 px-6 rounded-xl shadow-lg shadow-green-500/20 transition transform hover:scale-105 flex items-center gap-2 self-start md:self-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
+            Tambah Lapangan
         </button>
     </div>
 
-    <!-- Table -->
-    <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Lapangan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga/Jam</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($lapangans as $lapangan)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        @if($lapangan->image)
-                            <img src="{{ asset('storage/' . $lapangan->image) }}" class="h-12 w-12 object-cover rounded-md shadow-sm" alt="{{ $lapangan->name }}">
-                        @else
-                            <div class="h-12 w-12 bg-gray-200 flex items-center justify-center rounded-md text-xs text-gray-400 italic">No Photo</div>
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $lapangan->name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rp {{ number_format($lapangan->price_per_hour, 0, ',', '.') }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ $lapangan->description }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="{{ route('admin.lapangan.edit', $lapangan->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
-                        <form action="{{ route('admin.lapangan.destroy', $lapangan->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus lapangan ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <!-- Table Container -->
+    <div class="bg-white dark:bg-futsal-card rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-all">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-800">
+                <thead class="bg-slate-50/50 dark:bg-slate-900/50">
+                    <tr>
+                        <th class="px-8 py-5 text-left text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Foto</th>
+                        <th class="px-8 py-5 text-left text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Nama Lapangan</th>
+                        <th class="px-8 py-5 text-left text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest text-center">Harga/Jam</th>
+                        <th class="px-8 py-5 text-left text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Deskripsi</th>
+                        <th class="px-8 py-5 text-right text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    @forelse($lapangans as $lapangan)
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors">
+                        <td class="px-8 py-6 whitespace-nowrap">
+                            @if($lapangan->image)
+                                <img src="{{ asset('storage/' . $lapangan->image) }}" class="h-16 w-16 object-cover rounded-2xl shadow-lg border-2 border-white dark:border-slate-700" alt="{{ $lapangan->name }}">
+                            @else
+                                <div class="h-16 w-16 bg-slate-100 dark:bg-slate-800 flex items-center justify-center rounded-2xl text-[10px] text-slate-400 dark:text-gray-500 font-bold uppercase tracking-tighter text-center px-2">No Image</div>
+                            @endif
+                        </td>
+                        <td class="px-8 py-6 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white">{{ $lapangan->name }}</td>
+                        <td class="px-8 py-6 whitespace-nowrap text-center">
+                            <span class="bg-futsal-primary/10 text-futsal-primary dark:bg-futsal-accent/10 dark:text-futsal-accent px-3 py-1.5 rounded-lg font-black text-sm">
+                                Rp {{ number_format($lapangan->price_per_hour, 0, ',', '.') }}
+                            </span>
+                        </td>
+                        <td class="px-8 py-6 text-sm text-slate-500 dark:text-gray-400 max-w-xs truncate italic font-medium">"{{ $lapangan->description }}"</td>
+                        <td class="px-8 py-6 whitespace-nowrap text-right text-sm font-black">
+                            <a href="{{ route('admin.lapangan.edit', $lapangan->id) }}" class="text-futsal-primary dark:text-futsal-accent hover:underline mr-6">Edit</a>
+                            <form action="{{ route('admin.lapangan.destroy', $lapangan->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus lapangan ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700 hover:underline">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-8 py-12 text-center text-slate-500 dark:text-gray-500 font-medium italic">Belum ada data lapangan.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Modal Tambah -->

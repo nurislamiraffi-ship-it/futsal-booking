@@ -3,51 +3,61 @@
 @section('title', 'Kelola Jadwal - Admin Futsal Booking')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ showModal: false }">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold text-gray-900 border-b-4 border-green-500 inline-block pb-2">Kelola Jadwal Lapangan</h2>
-        <button @click="showModal = true" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition">
-            + Tambah Jadwal
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" x-data="{ showModal: false }">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+        <div>
+            <h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Kelola <span class="text-futsal-primary dark:text-futsal-accent font-black tracking-normal">Jadwal</span></h2>
+            <p class="text-slate-500 dark:text-gray-400 mt-1 font-medium">Atur ketersediaan waktu untuk setiap lapangan.</p>
+        </div>
+        <button @click="showModal = true" class="bg-futsal-accent hover:bg-green-400 text-black font-black py-3 px-6 rounded-xl shadow-lg shadow-green-500/20 transition transform hover:scale-105 flex items-center gap-2 self-start md:self-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
+            Tambah Jadwal
         </button>
     </div>
 
-    <!-- Table -->
-    <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lapangan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @foreach($jadwals as $jadwal)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ \Carbon\Carbon::parse($jadwal->date)->format('d M Y') }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ substr($jadwal->start_time, 0, 5) }} - {{ substr($jadwal->end_time, 0, 5) }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $jadwal->lapangan->name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        @if($jadwal->is_available)
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Tersedia</span>
-                        @else
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Di-booking</span>
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="{{ route('admin.jadwal.edit', $jadwal->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
-                        <form action="{{ route('admin.jadwal.destroy', $jadwal->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <!-- Table Container -->
+    <div class="bg-white dark:bg-futsal-card rounded-3xl shadow-xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-all">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-800">
+                <thead class="bg-slate-50/50 dark:bg-slate-900/50">
+                    <tr>
+                        <th class="px-8 py-5 text-left text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Tanggal</th>
+                        <th class="px-8 py-5 text-left text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Waktu</th>
+                        <th class="px-8 py-5 text-left text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Lapangan</th>
+                        <th class="px-8 py-5 text-center text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Status</th>
+                        <th class="px-8 py-5 text-right text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-widest">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    @forelse($jadwals as $jadwal)
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors">
+                        <td class="px-8 py-6 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white">{{ \Carbon\Carbon::parse($jadwal->date)->format('d M Y') }}</td>
+                        <td class="px-8 py-6 whitespace-nowrap text-sm font-bold text-slate-600 dark:text-gray-400">{{ substr($jadwal->start_time, 0, 5) }} - {{ substr($jadwal->end_time, 0, 5) }}</td>
+                        <td class="px-8 py-6 whitespace-nowrap text-sm font-medium text-slate-600 dark:text-gray-400">{{ $jadwal->lapangan->name }}</td>
+                        <td class="px-8 py-6 whitespace-nowrap text-center">
+                            @if($jadwal->is_available)
+                                <span class="px-4 py-1.5 inline-flex text-[10px] leading-5 font-black uppercase tracking-wider rounded-lg bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-futsal-accent text-center">Tersedia</span>
+                            @else
+                                <span class="px-4 py-1.5 inline-flex text-[10px] leading-5 font-black uppercase tracking-wider rounded-lg bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 text-center">Di-booking</span>
+                            @endif
+                        </td>
+                        <td class="px-8 py-6 whitespace-nowrap text-right text-sm font-black">
+                            <a href="{{ route('admin.jadwal.edit', $jadwal->id) }}" class="text-futsal-primary dark:text-futsal-accent hover:underline mr-6">Edit</a>
+                            <form action="{{ route('admin.jadwal.destroy', $jadwal->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700 hover:underline">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-8 py-12 text-center text-slate-500 dark:text-gray-500 font-medium italic">Belum ada data jadwal.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Modal Tambah -->
