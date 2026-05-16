@@ -47,11 +47,11 @@
                         @foreach($jadwals as $jadwal)
                             <label class="group cursor-pointer">
                                 <input type="radio" name="jadwal_id" value="{{ $jadwal->id }}" class="peer sr-only" required>
-                                <div class="rounded-2xl border-2 border-slate-100 dark:border-slate-800 p-5 hover:border-futsal-primary/50 dark:hover:border-futsal-accent/50 peer-checked:border-futsal-primary dark:peer-checked:border-futsal-accent peer-checked:bg-futsal-primary/5 dark:peer-checked:bg-futsal-accent/5 transition-all duration-300">
+                                <div class="rounded-2xl border-2 border-slate-100 dark:border-slate-800 p-5 hover:border-futsal-primary/50 dark:hover:border-futsal-accent/50 peer-checked:border-futsal-primary dark:peer-checked:border-futsal-accent peer-checked:bg-futsal-primary/5 dark:peer-checked:bg-futsal-accent/5 transition-all duration-300 peer-checked:[&_svg]:block peer-checked:[&_.custom-circle]:bg-futsal-primary dark:peer-checked:[&_.custom-circle]:bg-futsal-accent peer-checked:[&_.custom-circle]:border-transparent">
                                     <div class="flex justify-between items-start mb-2">
                                         <div class="font-black text-slate-900 dark:text-white uppercase tracking-tight">{{ \Carbon\Carbon::parse($jadwal->date)->format('d M Y') }}</div>
-                                        <div class="w-6 h-6 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center peer-checked:bg-futsal-primary dark:peer-checked:bg-futsal-accent peer-checked:border-transparent transition-all group-hover:scale-110">
-                                            <svg class="w-3.5 h-3.5 text-white dark:text-black hidden peer-checked:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="custom-circle w-6 h-6 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all group-hover:scale-110">
+                                            <svg class="w-3.5 h-3.5 text-white dark:text-black hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path>
                                             </svg>
                                         </div>
